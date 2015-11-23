@@ -1,18 +1,3 @@
-<head>
-  <title>twitterClone</title>
-</head>
-
-<body>
-  <div class="row">
-    <div class="col-md-4 col-sm-4">
-      {{> userManagement}}
-    </div>
-    <div class="col-md-8 col-sm-8">
-      {{> tweetBox}}
-    </div>
-  </div>
-</body>
-
 <template name="userManagement">
   <div class="user-container">
     <div class="panel panel-default userBox">
@@ -41,28 +26,6 @@
         </div>
         <button type="button" class="btn btn-info fullbutton" id="signup">Sign Up</button>
         {{/if}}
-
-      </div>
-    </div>
-  </div>
-</template>
-
-<template name="tweetBox">
-  <div class="tweetbox-container">
-    <div class="panel panel-default tweetbox col-md-6">
-      <div class="panel-body">
-        <!-- Text box for tweet content -->
-        <textarea class="form-control" id="tweetText" placeholder="What's happening?" rows="3"></textarea>
-
-        <!-- Character count & button -->
-        <div class="pull-right btnGroup">
-          <strong class="{{charClass}}">{{charCount}}</strong>
-          {{#if currentUser}}
-            <button class="btn btn-info pull-right" type="button" {{disableButton}}>Tweet</button>
-          {{else}}
-            <button class="btn btn-info pull-right" type="button" disabled>Please Log In</button>
-          {{/if}}
-        </div>
 
       </div>
     </div>
