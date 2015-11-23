@@ -16,8 +16,38 @@ if (Meteor.isClient) {
       var tweet = $('#tweetText').val();
       $('#tweetText').val('');
       Session.set('numChars', 0);
-      Tweets.insert({message: tweet});
+      Tweets.insert({message: tweet, user: Meteor.user().username});
     }
+  });
+
+  //  create new user entry on signup
+  Template.userManagement.events({
+    'click #signup': function () {
+      var user = {
+        username: $('#signup-username').val(),
+        password: $('#signup-password').val(),
+        profile: {
+          fullname: $('#signup-fullname').val(),
+        }
+      };
+
+      Accounts.createUser(user, function (error) {
+        if (error) alert(error);
+      });
+    },
+
+    'click #login': function () {
+        username: $('#login-username').val();
+        password: $('#login-password').val();
+
+        Meteor.loginWithPassword(username, password, function (error) {
+          if (error) alert(error);
+        });
+      },
+
+      'click #logout': function () {
+        Meteor.logout();
+      }
   });
 
   // push session variable changes to HTML
@@ -35,7 +65,7 @@ if (Meteor.isClient) {
     },
 
     disableButton: function () {
-      if (Session.get('numChars') <= 0 || Session.get('numChars') > 140) {
+      if (Session.get('numChars') <= 0 || Session.get('numChars') > 140 || !Meteor.user()) {
         return 'disabled';
       }
     }
