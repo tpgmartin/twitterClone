@@ -26,3 +26,31 @@ Template.userManagement.events({
       Meteor.logout();
     }
 });
+
+Template.userManagement.helpers({
+  'tweets': function () {
+    if (Meteor.user()) {
+      return Tweets.find({ user: Meteor.user().username }).count();
+    }
+  },
+
+  'following': function () {
+    if (Meteor.user()) {
+      return Relationships.find({ follower: Meteor.user().username }).count();
+    }
+  },
+
+  'followers': function () {
+    if (Meteor.user()) {
+      return Relationships.find({ following: Meteor.user().username }).count();
+    }
+  }
+});
+
+Template.followUsers.onCreated(function () {
+  if (Meteor.user()) {
+    this.subscribe('followings', Meteor.user().username);
+    this.subscribe('followers', Meteor.user().username);
+    this.subscribe('tweets', Meteor.user().username);
+  }
+});

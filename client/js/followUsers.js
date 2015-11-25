@@ -4,7 +4,20 @@ Template.followUsers.helpers({
   },
 
   'recommendedUsers': function () {
-    return Session.get('recommendedUsers');
+    if (Meteor.user()) {
+      var currentFollowings = UserUtils.findFollowings(Meteor.user().username);
+
+      var recUsers = Meteor.users.find({
+        username: {
+          $nin: currentFollowings
+        }
+      }, {
+        fields: { 'username': 1 },
+        limit: 5
+      }).fetch();
+
+      return recUsers;
+    }
   }
 });
 
@@ -27,8 +40,9 @@ Template.followUsers.events({
   }
 });
 
-Template.followUsers.onRendered(function () {
-  Meteor.call('recommendedUsers', function (err, res) {
-    Session.set('recommendedUsers', res);
-  });
+Template.followUsers.onCreated(function () {
+  if (Meteor.user()) {
+    this.subscribe('users', Meteor.user().username)
+    this.subscribe('followings', Meteor.user().username);
+  }
 });
